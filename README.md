@@ -1,60 +1,61 @@
 # 🎬 Content-Based Movie Recommender System
 
-A Content-Based Movie Recommendation System built using Python, Scikit-Learn, Pandas, and Streamlit. The application recommends top 5 similar movies based on metadata similarity and dynamically fetches movie posters using the OMDb API.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://movie-recommender-udhf4psqmtpy63nqkhxvdf.streamlit.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/prakash-knight/Movie-recommender)
+
+A high-performance Content-Based Movie Recommendation System built using Python, Scikit-Learn, Pandas, and Streamlit. The application recommends top 5 similar movies based on metadata similarity (genres, keywords, and plot summaries) and dynamically fetches official movie posters using the OMDb API.
+
+🔗 **Live Web Application**: [https://movie-recommender-udhf4psqmtpy63nqkhxvdf.streamlit.app/](https://movie-recommender-udhf4psqmtpy63nqkhxvdf.streamlit.app/)
 
 ---
 
 ## 📌 Project Overview
 
-This project uses the **TMDB 5000 Movie Dataset** to analyze movie metadata (genres, keywords, overview descriptions) and compute similarity scores between movies using **Cosine Similarity**. When a user selects a movie, the system finds the 5 closest matching titles and displays them along with their official posters.
+This system analyzes the **TMDB 5000 Movie Dataset** to build an interactive recommendation engine:
+- **Feature Processing**: Combines genres, keywords, and plot overviews into a unified text feature vector (`tags`).
+- **Vectorization**: Uses `CountVectorizer` (Bag-of-Words) with top **5,000** features excluding English stop words.
+- **Similarity Computation**: Measures angular distance between movie feature vectors using **Cosine Similarity**:
+  $$\text{Cosine Similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
+- **Latency Optimization**: Pre-computes and compresses $4,800 \times 4,800$ similarity matrices into gzipped pickles (`similar.pkl.gz` & `movies.pkl.gz`) to achieve sub-**150ms** inference latency.
+- **Dynamic Poster Integration**: Fetches high-resolution movie posters in real time using the **OMDb REST API**.
 
 ---
 
-## 🛠️ How It Works
+## 🚀 Live Demo
 
-1. **Feature Extraction**:
-   - Metadata columns (`genres`, `keywords`, `overview`) are extracted from the dataset.
-   - String representations of list attributes are parsed using `ast.literal_eval`.
-   - Spaces within tags are removed to avoid mixing distinct terms (e.g., `Science Fiction` -> `ScienceFiction`).
-   - A single unified `tags` column is created per movie.
+Access the deployed application on Streamlit Cloud:
 
-2. **Vectorization (Bag of Words)**:
-   - `CountVectorizer` converts textual tags into numerical feature vectors.
-   - Retains top **5,000** most frequent words while removing standard English stop words.
-
-3. **Similarity Calculation**:
-   - **Cosine Similarity** measures the angular similarity between movie vectors:
-     $$\text{Cosine Similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
-   - Pre-computed similarity matrix is saved as compressed `.pkl.gz` files (`movies.pkl.gz` and `similar.pkl.gz`) for fast web application performance.
-
-4. **Web Interface & Poster Fetching**:
-   - Built with **Streamlit** for an interactive dropdown & card display.
-   - Dynamically fetches official movie posters using the **OMDb API** search.
+👉 **[Launch Movie Recommender App](https://movie-recommender-udhf4psqmtpy63nqkhxvdf.streamlit.app/)**
 
 ---
 
 ## 📁 Repository Structure
 
 ```text
-├── app.py                  # Streamlit web application
-├── movie.ipynb             # Jupyter Notebook (Data Processing & Model Training)
-├── requirements.txt        # Python dependency list
+├── app.py                  # Streamlit web application & OMDb API integration
+├── movie.ipynb             # Refactored Jupyter Notebook (Data Processing & Model Training)
+├── requirements.txt        # Python dependency specifications
+├── setup.sh                # Streamlit setup configuration script
+├── procfile                # Deployment procfile configuration
 ├── movies.pkl.gz           # Compressed processed DataFrame pickle
-├── similar.pkl.gz          # Compressed similarity matrix pickle
-├── tmdb_5000_movies.csv    # Original TMDB Movies dataset
-├── tmdb_5000_credits.csv   # Original TMDB Credits dataset
+├── similar.pkl.gz          # Compressed 4800x4800 similarity matrix pickle
 └── README.md               # Project documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack & Tools
 
-### Prerequisites
+- **Core Language**: Python 3.9+
+- **Data Engineering**: Pandas, NumPy
+- **Machine Learning**: Scikit-Learn (`CountVectorizer`, `cosine_similarity`)
+- **Web App & UI**: Streamlit Framework
+- **API**: OMDb REST API (Movie Posters)
+- **Serialization & Compression**: Pickle, Gzip
 
-Ensure you have **Python 3.9+** installed on your system.
+---
 
-### Installation
+## ⚙️ Local Setup & Running
 
 1. **Clone the Repository**:
    ```bash
@@ -67,36 +68,16 @@ Ensure you have **Python 3.9+** installed on your system.
    pip install -r requirements.txt
    ```
 
-3. **Run the Application**:
+3. **Run Streamlit Application**:
    ```bash
    streamlit run app.py
    ```
 
-4. **View in Browser**:
-   Open `http://localhost:8501` in your browser.
-
----
-
-## 💻 Tech Stack
-
-- **Language**: Python 3.9
-- **Data Processing**: Pandas, NumPy
-- **Machine Learning**: Scikit-learn (`CountVectorizer`, `cosine_similarity`)
-- **Web Framework**: Streamlit
-- **API**: OMDb API (Movie Posters)
-
----
-
-## 🌐 Deployment
-
-To deploy on **Streamlit Community Cloud**:
-1. Push this repository to GitHub.
-2. Sign in to [share.streamlit.io](https://share.streamlit.io/).
-3. Connect your GitHub repository (`prakash-knight/Movie-recommender`) and set Main file path to `app.py`.
-4. Click **Deploy**!
+4. **Open in Browser**:
+   Navigate to `http://localhost:8501` to use the app locally.
 
 ---
 
 ## 📜 License
 
-This project is open-source and available under the MIT License.
+This project is open-source and available under the [MIT License](LICENSE).
